@@ -11,9 +11,9 @@ public class PrintBroadcast extends PrintWriter{
         //TODO Auto-generated constructor stub
     }
 
-    ArrayList<PrintSubscriber> subscribers=new ArrayList<>();
+    ArrayList<PrintWriter> subscribers=new ArrayList<>();
 
-    PrintBroadcast subscribe(PrintSubscriber s){
+    PrintBroadcast subscribe(PrintWriter s){
         subscribers.add(s);
         return this;
     }
@@ -21,21 +21,21 @@ public class PrintBroadcast extends PrintWriter{
     @Override
     public void print(String str){
         subscribers.forEach(s -> {
-            s.getPrintWriter().print(s.transform(str));
+            s.print(str);
         });
     }
     
     @Override
     public void println(String str){
         subscribers.forEach(s -> {
-            s.getPrintWriter().println(s.transform(str));
+            s.println(str);
         });
     }
 
     @Override
     public PrintWriter printf(String format, Object... args) {
         subscribers.forEach(s -> {
-            s.getPrintWriter().printf(format,s.transform(args[0].toString()));
+            s.printf(format,args);
         });
         return this;
     }
@@ -43,17 +43,18 @@ public class PrintBroadcast extends PrintWriter{
     @Override
     public void flush() {
         subscribers.forEach(s -> {
-            s.getPrintWriter().flush();
+            s.flush();
         });
         super.flush();
     }
 
     @Override
     public void close() {
-        subscribers.forEach(s -> {
-            s.getPrintWriter().close();
-        });
         super.close();
+        subscribers.forEach(s -> {
+            s.close();
+        });
+        subscribers=new ArrayList<>();
     }
 
 }

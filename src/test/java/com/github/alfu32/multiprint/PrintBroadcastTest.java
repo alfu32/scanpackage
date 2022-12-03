@@ -9,38 +9,44 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class PrintBroadcastTest {
-    private PrintBroadcast pb;
-
+    private static  PrintBroadcast pb;
+    private static Deferable atEnd;
     @BeforeAll
-    void init() throws FileNotFoundException{
+    static void init() throws FileNotFoundException{
         pb=new PrintBroadcast(null)
-            .subscribe(new PrintSubscriber(new PrintWriter(new File("test.xml"))){
-
-                @Override
-                public String transform(String ...o) {
-                    // TODO Auto-generated method stub
-                    return "<"+o[0]+">"+o[1]+"</"+o[0]+">";
-                }
-            });
-        
+            .subscribe(new PrintWriter(new File("test.xml")))
+            .subscribe(new PrintWriter(new File("test.json")));
+        atEnd=()-> {
+            pb.flush();
+            pb.close();
+        };
     }
     @AfterAll
-    void deinit(){
+    static void deinit(){
         pb.flush();
         pb.close();
+        atEnd.execute();
     }
     @Test
     void testPrint() {
-
+        pb.println("one");
+        pb.println("two");
+        pb.println("three");
     }
 
     @Test
     void testPrintf() {
+        pb.println("one");
+        pb.println("two");
+        pb.println("three");
 
     }
 
     @Test
     void testPrintln() {
+        pb.println("one");
+        pb.println("two");
+        pb.println("three");
 
     }
 
