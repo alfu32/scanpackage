@@ -7,6 +7,7 @@ import com.google.common.reflect.ClassPath.ClassInfo;
 import com.google.common.reflect.TypeToken;
 
 import java.lang.System;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -24,17 +25,30 @@ public final class App {
      * @throws SecurityException
      */
     public static void main(String[] args) throws IOException, SecurityException, ClassNotFoundException {
-        System.out.println("Hello World!");
-        for(Package p : Package.getPackages()){
+        
+        System.out.println("<packages>");
+        Package[] packages = Package.getPackages();
+        for(Package p : packages){
             String packageName=p.getName();
-            System.out.println(" : "+packageName);
-            for(ClassInfo c : getClasses(packageName)){
-                System.out.println("  - "+c.getName());
-                for(Method m: Class.forName(c.getName()).getMethods()){
-                    System.out.println("  - "+c.getName()+"#"+m.getName());
+            System.out.println("  <package name=\""+packageName+"\">");
+            Set<ClassInfo> classes = getClasses(packageName);
+            for(ClassInfo c : classes){
+                String className = c.getName();
+                System.out.println("    <class name=\""+className+"\">");
+                Class<?> clazz = Class.forName(c.getName());
+                Method[] methods = clazz.getMethods();
+                for(Method m: methods){
+                    System.out.println("      <method name=\""+m.getName()+"\"/>");
                 }
+                Field[] fields=clazz.getFields();
+                for(Field f: fields){
+                    System.out.println("      <field name=\""+f.getName()+"\"/>");
+                }
+                System.out.println("    </class>");
             }
+            System.out.println("  </package>");
         }
+        System.out.println("</packages>");
     }
     public static Set<ClassInfo> getClasses(String packageName) throws IOException{
         ClassPath classPath = ClassPath.from(App.class.getClassLoader());
