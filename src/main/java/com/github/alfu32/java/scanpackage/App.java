@@ -43,9 +43,9 @@ public final class App {
         Package[] packages = Package.getPackages();
         for(Package p : packages){
             String packageName=p.getName();
-            System.out.printf("scanning package %s",packageName);
-            String filename = packageName+".xml";
-            String filename2 = packageName+".json";
+            System.out.printf("scanning package %s\n",packageName);
+            String filename = "scans/"+packageName+".xml";
+            String filename2 = "scans/"+packageName+".json";
             if(packageName.startsWith("com.google")){
                 continue;
             }
