@@ -60,16 +60,18 @@ public final class App {
                     println(filename2,new Member(Member.Kind.INTERFACE,clazz.getName()).toJson());
                 } else if(clazz.isEnum()){
                     println(filename2,new Member(Member.Kind.ENUM,clazz.getName()).toJson());
-                } else {
+                } else if (clazz.isAnnotation()){
+                    println(filename2,new Member(Member.Kind.ANNOTATION,clazz.getName()).toJson());
+                }else{
                     println(filename2,new Member(Member.Kind.CLASS,clazz.getName()).toJson());
                 }
                 Method[] methods = clazz.getMethods();
                 for(Method m: methods){
-                    println(filename2,new Member(Member.Kind.METHOD,m.getName()).toJson());
+                    println(filename2,new Member(Member.Kind.METHOD,className+"."+m.getName()).toJson());
                 }
                 Field[] fields=clazz.getFields();
                 for(Field f: fields){
-                    println(filename2,new Member(Member.Kind.FIELD,f.getName()).toJson());
+                    println(filename2,new Member(Member.Kind.FIELD,className+"."+f.getName()).toJson());
                 }
             }
         }

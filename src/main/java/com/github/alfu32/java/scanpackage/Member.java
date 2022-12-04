@@ -3,6 +3,7 @@ package com.github.alfu32.java.scanpackage;
 public class Member {
     public enum Kind{
         PACKAGE,
+        ANNOTATION,
         ENUM,
         INTERFACE,
         CLASS,
