@@ -44,7 +44,7 @@ public final class App {
             Package p=packages[i];
             String packageName=p.getName();
             
-            System.out.printf("scanning package [%d/%d] %s\r",packageName,i,totalPackages);
+            System.out.printf("scanning package [%d/%d] %s\r",i,totalPackages,packageName);
             
             String filename = "scans/"+packageName+".xml";
             String filename2 = "scans/"+packageName+".json";

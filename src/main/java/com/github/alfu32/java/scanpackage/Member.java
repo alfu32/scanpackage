@@ -17,7 +17,7 @@ public class Member {
     }
     public String toJson(){
         return "{"
-        + "\"kind\":\"" + kind + "\","
+        + "\"kind\":\"" + kind.name() + "\","
         + "\"name\":\"" + fqn + "\""
         + "}";
     }
