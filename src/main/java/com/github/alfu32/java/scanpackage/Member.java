@@ -2,13 +2,16 @@ package com.github.alfu32.java.scanpackage;
 
 public class Member {
     public enum Kind{
+        PACKAGE,
+        ENUM,
+        INTERFACE,
         CLASS,
         METHOD,
         FIELD
     }
     public String fqn;
     public Kind kind;
-    public Member(String fqn,Kind kind){
+    public Member(Kind kind,String fqn){
         this.kind=kind;
         this.fqn=fqn;
     }

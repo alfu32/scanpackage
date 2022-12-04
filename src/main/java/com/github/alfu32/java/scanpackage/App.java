@@ -38,45 +38,41 @@ public final class App {
      */
     public static void main(String[] args) throws FileNotFoundException,IOException, SecurityException, ClassNotFoundException {
         
-        println("report.xml","<packages>");
-        println("report.json","[");
         Package[] packages = Package.getPackages();
         int totalPackages=packages.length;
         for(int i=0;i<packages.length;i++){
             Package p=packages[i];
             String packageName=p.getName();
-            System.out.printf("scanning package [%d/%d] %s\n",packageName,i,totalPackages);
+            
+            System.out.printf("scanning package [%d/%d] %s\r",packageName,i,totalPackages);
+            
             String filename = "scans/"+packageName+".xml";
             String filename2 = "scans/"+packageName+".json";
-            // if(packageName.startsWith("com.google")){
-            //     continue;
-            // }
-            println(filename,"  <package name=\""+packageName+"\">");
-            println(filename2,"\""+packageName+"\":{");
+            
+            println(filename2,new Member(Member.Kind.PACKAGE,packageName).toJson());
+            
             Set<ClassInfo> classes = getClasses(packageName);
             for(ClassInfo c : classes){
                 String className = c.getName();
-                println(filename,"    <class name=\""+className+"\">");
-                println(filename2,"\""+className+"\":{_\"_type\":\"class\",");
+                
                 Class<?> clazz = Class.forName(c.getName());
+                if(clazz.isInterface()){
+                    println(filename2,new Member(Member.Kind.INTERFACE,clazz.getName()).toJson());
+                } else if(clazz.isEnum()){
+                    println(filename2,new Member(Member.Kind.ENUM,clazz.getName()).toJson());
+                } else {
+                    println(filename2,new Member(Member.Kind.CLASS,clazz.getName()).toJson());
+                }
                 Method[] methods = clazz.getMethods();
                 for(Method m: methods){
-                    println(filename,"      <method name=\""+m.getName()+"\"/>");
-                    println(filename2,"\""+m.getName()+"\":{}");
+                    println(filename2,new Member(Member.Kind.METHOD,m.getName()).toJson());
                 }
                 Field[] fields=clazz.getFields();
                 for(Field f: fields){
-                    println(filename,"      <field name=\""+f.getName()+"\"/>");
-                    println(filename2,"\""+f.getName()+"\":{}");
+                    println(filename2,new Member(Member.Kind.FIELD,f.getName()).toJson());
                 }
-                println(filename,"    </class>");
-                println(filename2,"}");
             }
-            println(filename,"  </package>");
-            println(filename2,"}");
         }
-        println("report.xml","</packages>");
-        println("report.json","]");
     }
     public static Set<ClassInfo> getClasses(String packageName) throws IOException{
         ClassPath classPath = ClassPath.from(App.class.getClassLoader());
