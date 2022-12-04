@@ -41,14 +41,16 @@ public final class App {
         println("report.xml","<packages>");
         println("report.json","[");
         Package[] packages = Package.getPackages();
-        for(Package p : packages){
+        int totalPackages=packages.length;
+        for(int i=0;i<packages.length;i++){
+            Package p=packages[i];
             String packageName=p.getName();
-            System.out.printf("scanning package %s\n",packageName);
+            System.out.printf("scanning package [%d/%d] %s\n",packageName,i,totalPackages);
             String filename = "scans/"+packageName+".xml";
             String filename2 = "scans/"+packageName+".json";
-            if(packageName.startsWith("com.google")){
-                continue;
-            }
+            // if(packageName.startsWith("com.google")){
+            //     continue;
+            // }
             println(filename,"  <package name=\""+packageName+"\">");
             println(filename2,"\""+packageName+"\":{");
             Set<ClassInfo> classes = getClasses(packageName);
