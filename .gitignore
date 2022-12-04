@@ -4,7 +4,10 @@ repository
 log
 scan.txt
 scan.xml
+scan.json
+
 test.json
 test.xml
 test.csv
 test.*
+scans/**

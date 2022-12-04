@@ -38,40 +38,43 @@ public final class App {
      */
     public static void main(String[] args) throws FileNotFoundException,IOException, SecurityException, ClassNotFoundException {
         
-        println("scan.xml","<packages>");
-        println("scan.json","[");
+        println("report.xml","<packages>");
+        println("report.json","[");
         Package[] packages = Package.getPackages();
         for(Package p : packages){
             String packageName=p.getName();
+            System.out.printf("scanning package %s",packageName);
+            String filename = packageName+".xml";
+            String filename2 = packageName+".json";
             if(packageName.startsWith("com.google")){
                 continue;
             }
-            println("scan.xml","  <package name=\""+packageName+"\">");
-            println("scan.json","\""+packageName+"\":{");
+            println(filename,"  <package name=\""+packageName+"\">");
+            println(filename2,"\""+packageName+"\":{");
             Set<ClassInfo> classes = getClasses(packageName);
             for(ClassInfo c : classes){
                 String className = c.getName();
-                println("scan.xml","    <class name=\""+className+"\">");
-                println("scan.json","\""+className+"\":{_\"_type\":\"class\",");
+                println(filename,"    <class name=\""+className+"\">");
+                println(filename2,"\""+className+"\":{_\"_type\":\"class\",");
                 Class<?> clazz = Class.forName(c.getName());
                 Method[] methods = clazz.getMethods();
                 for(Method m: methods){
-                    println("scan.xml","      <method name=\""+m.getName()+"\"/>");
-                    println("scan.json","\""+m.getName()+"\":{}");
+                    println(filename,"      <method name=\""+m.getName()+"\"/>");
+                    println(filename2,"\""+m.getName()+"\":{}");
                 }
                 Field[] fields=clazz.getFields();
                 for(Field f: fields){
-                    println("scan.xml","      <field name=\""+f.getName()+"\"/>");
-                    println("scan.json","\""+f.getName()+"\":{}");
+                    println(filename,"      <field name=\""+f.getName()+"\"/>");
+                    println(filename2,"\""+f.getName()+"\":{}");
                 }
-                println("scan.xml","    </class>");
-                println("scan.json","}");
+                println(filename,"    </class>");
+                println(filename2,"}");
             }
-            println("scan.xml","  </package>");
-            println("scan.json","}");
+            println(filename,"  </package>");
+            println(filename2,"}");
         }
-        println("scan.xml","</packages>");
-        println("scan.json","]");
+        println("report.xml","</packages>");
+        println("report.json","]");
     }
     public static Set<ClassInfo> getClasses(String packageName) throws IOException{
         ClassPath classPath = ClassPath.from(App.class.getClassLoader());
