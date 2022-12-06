@@ -12,14 +12,17 @@ public class Member {
     }
     public String fqn;
     public Kind kind;
-    public Member(Kind kind,String fqn){
+    public String signature;
+    public Member(Kind kind,String fqn,String signature){
         this.kind=kind;
         this.fqn=fqn;
+        this.signature=signature;
     }
     public String toJson(){
         return "{"
-        + "\"kind\":\"" + kind.name() + "\","
-        + "\"name\":\"" + fqn + "\""
+        + "\"kind\":\"" + kind.name() + '"'+','
+        + "\"name\":\"" + fqn + '"'+','
+        + "\"signature\":\"" + signature + '"'
         + "}";
     }
 }
